@@ -1,27 +1,50 @@
-RAG Application with Supabase and pgvector
+# Hybrid RAG Application (Project 10)
 
-This project implements a simple Retrieval-Augmented Generation (RAG) application.
+This project is an upgraded RAG (Retrieval-Augmented Generation) application.
+It uses **hybrid search**: keyword search + semantic search.
+The results are merged using **Reciprocal Rank Fusion (RRF)**.
 
-Description
-The application allows users to upload a text document, store its chunks as vector embeddings in Supabase (PostgreSQL with pgvector),
-and ask questions that are answered based on the document content.
+---
 
-Tech Stack
+## Project Description
+
+The application allows the user to:
+- upload a text document,
+- ask questions about the document,
+- get answers based only on the document content.
+
+The system does not hallucinate and uses retrieved text as context.
+
+---
+
+## How the System Works
+
+1. The document is split into small text chunks.
+2. Each chunk is converted into an embedding and stored in Supabase.
+3. When the user asks a question:
+   - Keyword search finds exact words (Full-Text Search).
+   - Semantic search finds similar meaning using vectors.
+4. The results are combined using RRF.
+5. The best results are sent to the language model to generate the answer.
+
+---
+
+## Technologies Used
+
 - Python
 - Supabase (PostgreSQL)
 - pgvector
+- Full-Text Search (tsvector)
 - OpenAI API
 
-Project Structure
-- ingest.py — loads and processes documents (chunking + embeddings)
-- chat.py — chat interface using retrieval and generation
-- chunking.py — text chunking logic
+---
 
-How it works
-1. A document is loaded and split into chunks.
-2. Each chunk is converted into an embedding and stored in Supabase.
-3. A semantic search retrieves relevant chunks using cosine similarity.
-4. The LLM generates an answer based only on the retrieved context.
+## Project Files
+├─ ingest.py # load document and create embeddings
+├─ chat.py # hybrid search + RRF + chat
+├─ chunking.py # text chunking
+├─ doc.txt # example document
+├─ README.md
 
 How to run
 1. Create a Supabase project and enable pgvector.
